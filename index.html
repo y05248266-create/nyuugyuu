@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乳牛の飼育学習 | デジタル教材</title>
+    <style>
+        :root {
+            --primary-color: #27ae60;
+            --primary-hover: #1e8449;
+            --bg-color: #f4f8f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --sub-text: #666666;
+            --accent-bg: #eafaf1;
+            --border-color: #d5dbdb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--sub-text);
+        }
+
+        main {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .slide-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .slide {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent-bg);
+            padding-bottom: 0.75rem;
+        }
+
+        .slide-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .slide-title {
+            font-size: 1.4rem;
+            color: #1e8449;
+        }
+
+        .slide-body {
+            font-size: 1.05rem;
+        }
+
+        .badge-list {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: var(--accent-bg);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            border: 1px solid rgba(39, 174, 96, 0.2);
+        }
+
+        .highlight-box {
+            background-color: var(--accent-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.2rem;
+            background-color: #fafafa;
+        }
+
+        .card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .quiz-option {
+            background-color: #f8f9fa;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background-color: var(--accent-bg);
+        }
+
+        .quiz-feedback {
+            margin-top: 1.2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .game-banner {
+            text-align: center;
+            background: linear-gradient(135deg, #eafaf1 0%, #d5f5e3 100%);
+            border: 2px dashed var(--primary-color);
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .game-banner h3 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+        }
+
+        .btn-start {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            margin-top: 1.2rem;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-start:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
+        }
+
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-nav {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-nav:hover {
+            background-color: #1a252f;
+        }
+
+        .btn-nav:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--sub-text);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                🐄 乳牛の飼育学習 <span>デジタル教材</span>
+            </div>
+            <div class="progress-text">
+                <span id="current-slide">1</span> / <span id="total-slides">8</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="slide-container">
+            
+            <!-- スライド 1 -->
+            <div class="slide active">
+                <div class="slide-header">
+                    <div class="slide-number">1</div>
+                    <h2 class="slide-title">はじめに：乳牛の飼育と生命・酪農の学び</h2>
+                </div>
+                <div class="slide-body">
+                    <div class="badge-list">
+                        <span class="badge">🐄 生命の尊重</span>
+                        <span class="badge">⚙️ 飼育・衛生管理</span>
+                        <span class="badge">⚖️ トレードオフ</span>
+                    </div>
+                    <p>中学校技術科の「生物育成に関する技術」では、作物の栽培や小型家畜だけでなく、大型家畜である**乳牛の飼育技術（酪農）**についても学びます。</p>
+                    <div class="highlight-box">
+                        <strong>🌱 学習のゴール：</strong><br>
+                        乳牛の発育・搾乳環境（温度・エサ・衛生・搾乳管理）を理解し、効率的な生乳生産と牛の健康・動物福祉（アニマルウェルフェア）・環境保全とのバランス（トレードオフ）を考える力を身につけます。
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 2 -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">2</div>
+                    <h2 class="slide-title">乳牛の品種と目的</h2>
+                </div>
+                <div class="slide-body">
+                    <p>日本の酪農で飼育されている乳牛には、主に目的や特徴の異なる**2つの品種**が知られています。</p>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h4>🥛 ホルスタイン種</h4>
+                            <p><strong>代表種：</strong>白黒模様でおなじみの代表種</p>
+                            <p>1頭あたりの産乳量が非常に多く、年間で約8,000〜10,000kg以上の生乳を生産します。日本の飲用牛乳の大部分を支えています。</p>
+                        </div>
+                        <div class="card">
+                            <h4>🧀 ジャージー種</h4>
+                            <p><strong>代表種：</strong>薄い茶色（淡褐色）のやや小型な牛</p>
+                            <p>産乳量はホルスタインより少なめですが、乳脂率や乳たんぱく質が高く、濃厚でコクのある牛乳やバター・チーズ作りに最適です。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 3 -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">3</div>
+                    <h2 class="slide-title">育成環境と温度・快適性管理</h2>
+                </div>
+                <div class="slide-body">
+                    <p>乳牛は寒さには比較的強いですが、**暑さには非常に弱い**性質があります。</p>
+                    <div class="highlight-box">
+                        <span style="font-size: 1.3rem; font-weight: bold; color: #1e8449;">適正温度：10℃〜20℃</span>
+                        <p style="margin-top:0.5rem;">気温が25℃を超えると「暑熱ストレス」を受け、食欲低下・産乳量の減少・病気にかかりやすくなるリスクが高まります。</p>
+                    </div>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h4>🌬️ 夏場の暑さ対策</h4>
+                            <p>牛舎内に大型送風機（扇風機）を設置して風を送るほか、細霧（ミスト）スプリンクラーで体を冷やす工夫が行われます。</p>
+                        </div>
+                        <div class="card">
+                            <h4>🛏️ 牛床（ベッド）の快適さ</h4>
+                            <p>牛が横になって過ごす時間（1日12〜14時間）は消化や搾乳に直結するため、乾燥した敷料（おがくず・スラリー等）で清潔かつ快適に保ちます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 4 -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">4</div>
+                    <h2 class="slide-title">エサ（飼料）と水の管理</h2>
+                </div>
+                <div class="slide-body">
+                    <p>美味しい牛乳をたくさん出すためには、牛の「4つの胃」の働きを考えたバランス良い栄養と大量の水が不可欠です。</p>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h4>🌾 粗飼料（牧草・サイレージ）</h4>
+                            <p>食物繊維が豊富で、草を反芻（消化するために何度も噛み直す）させて胃の健康を保つための基礎となる大切なエサです。</p>
+                        </div>
+                        <div class="card">
+                            <h4>🌽 濃縮飼料（トウモロコシ・大豆等）</h4>
+                            <p>エネルギーやタンパク質を多く含み、高い産乳量を維持するために欠かせない栄養補助のエサです。</p>
+                        </div>
+                    </div>
+                    <div class="highlight-box" style="margin-top:1.2rem; border-left-color: #3498db; background-color: #ebf5fb;">
+                        <strong>💧 水の重要性：</strong>牛乳の約87%は水分です。乳牛は1日に**100L〜150L以上**の新鮮な水を飲みます。水が足りないと即座に産乳量が落ちます。
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 5 -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">5</div>
+                    <h2 class="slide-title">搾乳と衛生管理（バイオセキュリティ）</h2>
+                </div>
+                <div class="slide-body">
+                    <p>生乳は食品として出荷されるため、極めて高いレベルの衛生管理（バイオセキュリティ）が求められます。</p>
+
+                    <div class="badge-list">
+                        <span class="badge">🧼 乳頭の拭き取り・消毒（ディッピング）</span>
+                        <span class="badge">🤖 搾乳ロボット・パイプライン</span>
+                        <span class="badge">🩺 乳房炎（病気）の予防</span>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>搾乳と衛生のポイント：</strong><br>
+                        朝夕1日2〜3回の決まった時間に搾乳を行います。搾乳前後の乳頭消毒を徹底し、細菌が乳房内に入り込む感染症（乳房炎）を防ぐことが生乳の品質を守る上で最も重要です。
+                    </div>
+                </div>
+            </div>
+
+            <!-- スライド 6 -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">6</div>
+                    <h2 class="slide-title">アニマルウェルフェア（動物福祉）と持続可能な酪農</h2>
+                </div>
+                <div class="slide-body">
+                    <p>牛の快適さに配慮した飼育スタイルを選択することが、近年の持続可能な酪農のテーマとなっています。</p>
+
+                    <div class="card-grid">
+                        <div class="card">
+                            <h4>🏠 つなぎ飼い方式</h4>
+                            <p><strong>長所：</strong>省スペースで個体ごとの体調管理や給餌がしやすい。<br><strong>短所：</strong>牛が自由に行動できず運動不足になりやすい。</p>
+                        </div>
+                        <div class="card">
+                            <h4>🌿 フリーストール・放牧方式</h4>
+                            <p><strong>長所：</strong>牛が自由に出入り・横になれ、ストレスが少ない。<br><strong>短所：</strong>広い土地・大きな設備投資が必要で、フンの管理コストが上がる。</p>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1.2rem;">👉 生産効率・労働力・コストと、牛の快適性（ウェルフェア）とのバランス（トレードオフ）を考えることが技術評価の鍵です。</p>
+                </div>
+            </div>
+
+            <!-- スライド 7 -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">7</div>
+                    <h2 class="slide-title">理解度確認クイズ</h2>
+                </div>
+                <div class="slide-body">
+                    <p><strong>Q. 乳牛の飼育環境において、夏場の気温が25℃を超えた場合の最も適切な対応はどれでしょうか？</strong></p>
+
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(false)">A. 暑いほうがよく水を吸ってよく育つので、締め切って温室状態にする</button>
+                        <button class="quiz-option" onclick="checkAnswer(true)">B. 暑熱ストレスを防ぐため、大型扇風機やミスト冷房で牛舎の温度を下げる</button>
+                        <button class="quiz-option" onclick="checkAnswer(false)">C. 体温を下げるために水を与えず、エサだけを通常の3倍食べさせる</button>
+                    </div>
+
+                    <div id="quiz-feedback" class="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- スライド 8 -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-number">8</div>
+                    <h2 class="slide-title">まとめ & シミュレーションゲームへ！</h2>
+                </div>
+                <div class="slide-body">
+                    <p>乳牛の飼育と酪農の基礎知識の学習はこれで完了です！<br>次はいよいよ、酪農経営者となって環境・飼料・衛生・コストを管理する体験シミュレーションゲームに挑戦してみましょう。</p>
+
+                    <div class="game-banner">
+                        <span>🐄🎮</span>
+                        <h3>酪農シミュレーション<br>「モーモーカンパニー」</h3>
+                        <p>学んだ知識を活かして、元気な乳牛を育てて経営を成功させよう！</p>
+
+                        <!-- 指定されたURLへのリンクボタン -->
+                        <a href="https://gijyutu.com/kyouzai/moo_moo/" class="btn-start" target="_blank" rel="noopener noreferrer">
+                            モーモーカンパニーをスタート ➔
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ナビゲーションボタン -->
+            <div class="nav-controls">
+                <button class="btn-nav" id="btn-prev" onclick="moveSlide(-1)">前へ</button>
+                <button class="btn-nav" id="btn-next" onclick="moveSlide(1)">次へ</button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        © 技術科 生物育成学習デジタル教材 | モーモーカンパニー導入版
+    </footer>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function updateSlideDisplay() {
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlideIndex);
+            });
+
+            document.getElementById('current-slide').textContent = currentSlideIndex + 1;
+
+            document.getElementById('btn-prev').disabled = currentSlideIndex === 0;
+            document.getElementById('btn-next').disabled = currentSlideIndex === totalSlides - 1;
+        }
+
+        function moveSlide(direction) {
+            currentSlideIndex += direction;
+            if (currentSlideIndex < 0) currentSlideIndex = 0;
+            if (currentSlideIndex >= totalSlides) currentSlideIndex = totalSlides - 1;
+            updateSlideDisplay();
+        }
+
+        function checkAnswer(isCorrect) {
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.style.display = 'block';
+            if (isCorrect) {
+                feedback.style.backgroundColor = '#d4edda';
+                feedback.style.color = '#155724';
+                feedback.innerHTML = '⭕ 正解！<br>乳牛は寒さに強い反面、暑さに非常に弱いため、送風やミスト冷房による暑熱対策が不可欠です。';
+            } else {
+                feedback.style.backgroundColor = '#f8d7da';
+                feedback.style.color = '#721c24';
+                feedback.innerHTML = '❌ 不正解... もう一度考えてみましょう。乳牛は暑さに弱い動物です。';
+            }
+        }
+
+        updateSlideDisplay();
+    </script>
+</body>
+</html>
